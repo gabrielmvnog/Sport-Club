@@ -8,6 +8,26 @@
     android:background="@drawable/gradient"
     tools:context="br.com.gfsportclub.sportclub.MainActivity">
 
+    <EditText
+        android:id="@+id/username"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/password"
+        android:layout_alignStart="@+id/password"
+        android:layout_below="@+id/sign_in_button_google"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_name"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button_google" />
+
 
     <EditText
         android:id="@+id/password"
@@ -29,7 +49,7 @@
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/sign_in_button_l"
         style="@android:style/Widget.Holo.Button"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
@@ -57,10 +77,10 @@
         android:text="Esqueceu sua senha? Clique aqui"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_button_l" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/sign_up_button_l"
         style="@android:style/Widget.Holo.Button.Borderless"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
@@ -70,29 +90,9 @@
         android:text="Sign Up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button_l" />
 
-
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignStart="@+id/password"
-        android:layout_below="@+id/sign_in_button_google"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:background="#11000000"
-        android:drawableLeft="@drawable/ic_action_name"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_button_google" />
-
-    <ImageView
+    <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button_facebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
