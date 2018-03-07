@@ -41,7 +41,11 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ForgotActivity" />
-        <activity android:name=".FeedActivity"></activity>
+        <activity android:name=".FeedActivity" />
+        <activity
+            android:name=".NavigationActivity"
+            android:label="@string/title_activity_navigation"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
