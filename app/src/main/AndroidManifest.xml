@@ -45,6 +45,10 @@
         <activity
             android:name=".NavigationActivity"
             android:label="@string/title_activity_navigation"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SelectSportActivity"
+            android:label="@string/title_activity_select_sport"
             android:theme="@style/AppTheme"></activity>
     </application>
 

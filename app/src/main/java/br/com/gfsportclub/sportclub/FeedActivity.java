@@ -2,6 +2,7 @@ package br.com.gfsportclub.sportclub;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,8 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -81,6 +84,7 @@ public class FeedActivity extends AppCompatActivity
         nome_U.setText(user.getDisplayName());
         email_U.setText(user.getEmail());
 
+        displaySelectedScreen(R.id.nav_events);
 
     }
 
@@ -118,28 +122,53 @@ public class FeedActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        if (id == R.id.nav_profile) {
 
-        } else if (id == R.id.nav_events) {
+    private void displaySelectedScreen(int id){
+        android.support.v4.app.Fragment fragment = null;
 
-        } else if (id == R.id.nav_logout) {
-            signOut();
+        switch (id){
+            case R.id.nav_profile:
+                fragment = new ProfileFragment();
+                break;
+
+            case R.id.nav_events:
+                fragment = new EventFragment();
+                break;
+            case R.id.nav_logout:
+                signOut();
+                break;
+
+
         }
 
+        if(fragment!=null){
+            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_nav, fragment);
+            ft.commit();
 
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        android.support.v4.app.Fragment fragment = null;
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        displaySelectedScreen(id);
+
         return true;
     }
+
 
     private void signOut() {
         mAuth.signOut();
         mGoogleSignInClient.signOut();
+        LoginManager.getInstance().logOut();
     }
 }

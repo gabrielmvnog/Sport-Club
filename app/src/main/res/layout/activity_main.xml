@@ -9,7 +9,7 @@
     tools:context="br.com.gfsportclub.sportclub.MainActivity">
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/username_l"
         style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
@@ -30,10 +30,10 @@
 
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/password_l"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/username"
+        android:layout_below="@+id/username_l"
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -45,7 +45,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/username_l" />
 
 
     <Button
@@ -53,7 +53,7 @@
         style="@android:style/Widget.Holo.Button"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password"
+        android:layout_below="@+id/password_l"
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -62,11 +62,11 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/password_l" />
 
 
     <TextView
-        android:id="@+id/forgot_passwo"
+        android:id="@+id/forgot_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -94,20 +94,22 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button_facebook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:srcCompat="@drawable/facebook" />
+        app:srcCompat="@drawable/facebook"
+         />
 
-    <ImageView
+    <com.google.android.gms.common.SignInButton
+
         android:id="@+id/sign_in_button_google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -115,6 +117,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button_facebook"
         app:srcCompat="@drawable/google" />
+
 
     <TextView
         android:id="@+id/textView"

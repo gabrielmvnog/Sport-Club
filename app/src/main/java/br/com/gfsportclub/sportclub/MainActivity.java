@@ -5,9 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private CallbackManager mCallbackManager;
+    private EditText emailLogin, passwordLogin;
+    private TextView forgotPass;
 
     @Override
     protected void onStart() {
@@ -91,12 +96,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signInButton = (Button) findViewById(R.id.sign_in_button_l);
         signUpButton = (Button) findViewById(R.id.sign_up_button_l);
         mAuth = FirebaseAuth.getInstance();
+        emailLogin = (EditText) findViewById(R.id.username_l);
+        passwordLogin = (EditText) findViewById(R.id.password_l);
+        forgotPass = (TextView) findViewById(R.id.forgot_pass);
 
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ForgotActivity.class));
+            }
+        });
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+            }
+        });
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String email = emailLogin.getText().toString().trim();
+                String password = passwordLogin.getText().toString().trim();
+
+                if(TextUtils.isEmpty(email)){
+                        Toast.makeText(getApplicationContext(),"Entre com o email", Toast.LENGTH_SHORT).show();
+                        return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    Toast.makeText(getApplicationContext(),"Entre com a senha", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                        }   else {
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "A autenticação falhou.",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
             }
         });
 
