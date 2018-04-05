@@ -3,6 +3,8 @@
     package="br.com.gfsportclub.sportclub">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.apps.photos.permission.GOOGLE_PHOTOS" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <activity android:theme="@style/Theme.AppCompat.NoActionBar"
+                  android:name=".SplashScreenActivity"
+                    android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,13 +48,11 @@
         <activity android:name=".ForgotActivity" />
         <activity android:name=".FeedActivity" />
         <activity
-            android:name=".NavigationActivity"
-            android:label="@string/title_activity_navigation"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".SelectSportActivity"
             android:label="@string/title_activity_select_sport"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".PostActivity" />
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>

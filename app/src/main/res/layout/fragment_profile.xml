@@ -11,7 +11,7 @@
 
 
     <RelativeLayout
-        android:background="@drawable/gradientprofile"
+        android:background="@color/com_smart_login_code"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
@@ -27,7 +27,7 @@
                 android:layout_weight="1"
                 android:src="@drawable/ic_account_circle_black_24dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/profileUsername"

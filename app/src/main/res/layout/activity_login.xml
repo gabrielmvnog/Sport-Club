@@ -5,25 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
-    tools:context="br.com.gfsportclub.sportclub.MainActivity">
+    android:background="@drawable/metalgrid1"
+    tools:context="br.com.gfsportclub.sportclub.LoginActivity">
 
     <EditText
         android:id="@+id/username_l"
         style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignStart="@+id/password"
+        android:layout_alignLeft="@+id/password_l"
+        android:layout_alignStart="@+id/password_l"
         android:layout_below="@+id/sign_in_button_google"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:background="#11000000"
         android:drawableLeft="@drawable/ic_action_name"
         android:ems="10"
         android:hint="Username"
         android:inputType="textEmailAddress"
+        android:textColorHint="#ffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_button_google" />
@@ -42,6 +43,7 @@
         android:drawableLeft="@drawable/ic_action_password"
         android:ems="10"
         android:hint="Password"
+        android:textColorHint="#ffff"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +79,7 @@
         android:text="Esqueceu sua senha? Clique aqui"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#ffff"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_button_l" />
 
     <Button
@@ -94,11 +97,13 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button_facebook"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
+        android:layout_width="195dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -109,7 +114,7 @@
 
         android:id="@+id/sign_in_button_google"
         android:layout_width="200dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -125,26 +130,26 @@
         android:layout_height="44dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="165dp"
         android:text="Bem Vindo ao Sport Club"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="#ffff"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+        app:layout_constraintTop_toTopOf="@+id/imageView12" />
 
     <ImageView
         android:id="@+id/imageView12"
-        android:layout_width="112dp"
-        android:layout_height="106dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/googleg_standard_color_18" />
+        app:srcCompat="@drawable/logosportclub" />
 
 
 </android.support.constraint.ConstraintLayout>

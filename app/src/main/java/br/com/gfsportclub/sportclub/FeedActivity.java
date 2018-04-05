@@ -1,12 +1,8 @@
 package br.com.gfsportclub.sportclub;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
@@ -69,7 +64,7 @@ public class FeedActivity extends AppCompatActivity
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() == null){
-                    startActivity(new Intent(FeedActivity.this, MainActivity.class));
+                    startActivity(new Intent(FeedActivity.this, LoginActivity.class));
                 }
             }
         };

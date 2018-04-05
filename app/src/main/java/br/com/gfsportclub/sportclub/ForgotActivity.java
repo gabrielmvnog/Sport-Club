@@ -53,7 +53,7 @@ public class ForgotActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ForgotActivity.this, MainActivity.class));
+                startActivity(new Intent(ForgotActivity.this, LoginActivity.class));
             }
         });
 
