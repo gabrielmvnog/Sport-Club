@@ -23,7 +23,7 @@ public class SelectSportActivity extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SelectSportActivity.this, FeedActivity.class));
+                startActivity(new Intent(SelectSportActivity.this, BNActivity.class));
             }
         });
 

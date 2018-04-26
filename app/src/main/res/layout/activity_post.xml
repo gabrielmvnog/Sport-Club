@@ -16,7 +16,8 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:onClick="imageButtonClicked"
-        android:layout_marginLeft="40dp"/>
+        android:layout_marginLeft="40dp"
+        android:scaleType="centerCrop" />
 
     <EditText
         android:layout_width="match_parent"
@@ -27,8 +28,26 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descrição"
-        android:id="@+id/descrEvento"/>
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:id="@+id/descrEvento"
+        android:hint="Descrição"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="DD/MM/YYYY"
+        android:id="@+id/data_evento"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Local"
+        android:id="@+id/local_evento"/>
 
     <Button
         android:layout_width="match_parent"

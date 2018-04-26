@@ -1,35 +1,32 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="br.com.gfsportclub.sportclub.EventFragment"
-    android:paddingTop="10dp"
-    android:paddingRight="10dp"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
+
     >
 
-    <!-- TODO: Update blank fragment layout -->
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="17dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_add" />
+            <include layout="@layout/bar_sportclub"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/eventList">
 
-    </android.support.v7.widget.RecyclerView>
 
-</RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/eventList"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+
+
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

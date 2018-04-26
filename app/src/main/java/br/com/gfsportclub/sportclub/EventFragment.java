@@ -1,17 +1,27 @@
 package br.com.gfsportclub.sportclub;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -29,17 +39,20 @@ public class EventFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getActivity().setTitle("Eventos");
+        setHasOptionsMenu(true);
     }
 
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_event, container, false);
 
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("events");
         mDatabase.keepSynced(true);
@@ -57,9 +70,10 @@ public class EventFragment extends Fragment {
         mPeopleRVAdapter = new FirebaseRecyclerAdapter<Event, EventViewHolder>(personsOptions) {
             @Override
             protected void onBindViewHolder(EventFragment.EventViewHolder holder, final int position, final Event model) {
-                holder.setTitle(model.getTitle());
-                holder.setDesc(model.getDescr());
-                holder.setImage(getContext(), model.getImage());
+                holder.setTitle(model.getTitulo());
+                holder.setData(model.getData());
+                holder.setLocal(model.getLocal());
+                holder.setImage(getContext(), model.getImagem());
 
             }
 
@@ -76,17 +90,25 @@ public class EventFragment extends Fragment {
 
         mPeopleRV.setAdapter(mPeopleRVAdapter);
 
-        addPost = (FloatingActionButton) v.findViewById(R.id.addButton);
-
-
-        addPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), PostActivity.class));
-            }
-        });
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.event_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_event:
+                getActivity().startActivity(new Intent(getActivity(), PostActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -111,18 +133,22 @@ public class EventFragment extends Fragment {
         }
 
         public void setTitle(String title){
-            TextView post_title = (TextView)mView.findViewById(R.id.event_title);
+            TextView post_title = (TextView)mView.findViewById(R.id.card_event_title);
             post_title.setText(title);
         }
-        public void setDesc(String desc){
-            TextView post_desc = (TextView)mView.findViewById(R.id.event_descr);
-            post_desc.setText(desc);
+        public void setData(String desc){
+            TextView post_data = (TextView)mView.findViewById(R.id.card_event_data);
+            post_data.setText(desc);
         }
         public void setImage(Context ctx, String image){
-            ImageView post_image = (ImageView) mView.findViewById(R.id.event_image);
+            ImageView post_image = (ImageView) mView.findViewById(R.id.card_event_image);
             Picasso.with(ctx).load(image).into(post_image);
         }
 
+        public void setLocal(String local) {
+            TextView post_local = (TextView) mView.findViewById(R.id.card_event_location);
+            post_local.setText(local);
+        }
     }
 
 

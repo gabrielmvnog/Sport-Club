@@ -273,7 +273,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(user_id)){
-                    startActivity(new Intent(LoginActivity.this, FeedActivity.class));
+                    startActivity(new Intent(LoginActivity.this, BNActivity.class));
                 } else {
                     Toast.makeText(LoginActivity.this, "Usuário não cadastrado", Toast.LENGTH_SHORT).show();
                     signOut();

@@ -24,7 +24,7 @@ public class PostActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
     private Uri uri = null;
     private ImageButton imageButton;
-    private EditText edtName, edtDesc;
+    private EditText edtName, edtDesc, edtData, edtEnd;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
 
@@ -35,6 +35,8 @@ public class PostActivity extends AppCompatActivity {
 
         edtName = findViewById(R.id.nomeEvento);
         edtDesc = findViewById(R.id.descrEvento);
+        edtData = findViewById(R.id.data_evento);
+        edtEnd = findViewById(R.id.local_evento);
 
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("events");
@@ -62,6 +64,8 @@ public class PostActivity extends AppCompatActivity {
 
         final String nameValue = edtName.getText().toString().trim();
         final String descrValue = edtDesc.getText().toString().trim();
+        final String dataValue = edtData.getText().toString().trim();
+        final String endValue = edtEnd.getText().toString().trim();
 
         if (!TextUtils.isEmpty(nameValue)){
             StorageReference filePath = storageReference.child("PostImage").child(uri.getLastPathSegment());
@@ -73,6 +77,8 @@ public class PostActivity extends AppCompatActivity {
                      DatabaseReference newPost = databaseReference.push();
                      newPost.child("titulo").setValue(nameValue);
                      newPost.child("descr").setValue(descrValue);
+                     newPost.child("data").setValue(dataValue);
+                     newPost.child("local").setValue(endValue);
                      newPost.child("imagem").setValue(downloadurl.toString());
                      newPost.child("key").setValue(newPost.getKey());
                 }

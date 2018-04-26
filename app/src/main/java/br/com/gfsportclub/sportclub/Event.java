@@ -6,26 +6,53 @@ package br.com.gfsportclub.sportclub;
 
 public class Event {
 
-    String titulo, imagem, descr, key;
+    String titulo, imagem, descr, key, data, local;
 
     public Event(){
 
     }
 
-    public Event(String titulo,String imagem,String descr, String key){
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public Event(String titulo, String imagem, String descr, String key, String local, String data){
             this.titulo = titulo;
             this.imagem= imagem;
             this.descr = descr;
             this.key = key;
+            this.data = data;
+            this.local = local;
     }
 
-    public String getTitle() {
-        return titulo;
-    }
-
-    public String getImage() {
-        return imagem;
-    }
 
     public String getDescr() {
         return descr;
@@ -35,13 +62,6 @@ public class Event {
         this.descr = descr;
     }
 
-    public void setImage(String imagem) {
-        this.imagem = imagem;
-    }
-
-    public void setTitle(String titulo) {
-        this.titulo = titulo;
-    }
 
     public String getKey() {
         return key;

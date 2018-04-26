@@ -6,14 +6,18 @@
     tools:context="br.com.gfsportclub.sportclub.ProfileFragment"
     android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-
 
 
     <RelativeLayout
-        android:background="@color/com_smart_login_code"
         android:layout_width="match_parent"
         android:layout_height="200dp">
+
+        <RelativeLayout
+            android:background="@color/colorPrimary"
+            android:layout_height="100dp"
+            android:layout_width="match_parent">
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,28 +26,87 @@
 
             <ImageView
                 android:id="@+id/profilePicure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_account_circle_black_24dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp" />
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
+                app:srcCompat="@drawable/ic_account_circle_black_24dp"
+                />
 
             <TextView
                 android:id="@+id/profileUsername"
-                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="TextView"
-                android:layout_gravity="center_horizontal"
-                android:textColor="#fff"
-                android:textStyle="bold"
-                android:textSize="21sp"/>
+                android:textSize="21sp"
+                android:textStyle="bold" />
         </LinearLayout>
+
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="2">
+
+            <TextView
+                android:text="Amigos"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:id="@+id/profile_friends"/>
+
+            <TextView
+                android:text="Configurações"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:id="@+id/profile_setup"/>
+
+        </GridLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Idade: 22 anos"
+        android:paddingTop="10dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Gênero: masculino"
+        android:paddingTop="10dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Profissional"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"/>
+
+
+        <TextView
+            android:id="@+id/interresesProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="Interesses: "
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:layout_gravity="center"/>
 
 
 

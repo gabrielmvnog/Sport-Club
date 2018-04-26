@@ -13,10 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:theme="@style/Theme.AppCompat.NoActionBar"
-                  android:name=".SplashScreenActivity"
-                    android:noHistory="true">
+        <activity
+            android:name=".SplashScreenActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,13 +46,16 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ForgotActivity" />
-        <activity android:name=".FeedActivity" />
         <activity
             android:name=".SelectSportActivity"
             android:label="@string/title_activity_select_sport"
             android:theme="@style/AppTheme" />
         <activity android:name=".PostActivity" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".BNActivity"
+            android:label="@string/title_activity_bn" />
+        <activity android:name=".SetupActivity"></activity>
     </application>
 
 </manifest>

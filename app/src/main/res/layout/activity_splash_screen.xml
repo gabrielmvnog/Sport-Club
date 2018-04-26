@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/metalgrid1"
-    tools:context="br.com.gfsportclub.sportclub.SelectSportActivity">
+    tools:context="br.com.gfsportclub.sportclub.SplashScreenActivity">
 
 
     <ImageView

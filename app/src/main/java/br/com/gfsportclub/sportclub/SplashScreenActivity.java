@@ -46,7 +46,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
                 if(user){
 
-                    startActivity(new Intent(SplashScreenActivity.this, FeedActivity.class));
+                    startActivity(new Intent(SplashScreenActivity.this, BNActivity.class));
                 }else{
                     startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
                 }
