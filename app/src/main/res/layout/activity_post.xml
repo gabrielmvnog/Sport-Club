@@ -1,58 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.gfsportclub.sportclub.PostActivity"
-    android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp">
+    tools:context="br.com.gfsportclub.sportclub.PostActivity">
 
-    <ImageButton
-        android:id="@+id/addpostimage"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:onClick="imageButtonClicked"
-        android:layout_marginLeft="40dp"
-        android:scaleType="centerCrop" />
+    <include layout="@layout/bar_sportclub"/>
 
-    <EditText
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nome do evento"
-        android:id="@+id/nomeEvento"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:id="@+id/descrEvento"
-        android:hint="Descrição"/>
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp" >
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:hint="DD/MM/YYYY"
-        android:id="@+id/data_evento"/>
+            <ImageButton
+                android:id="@+id/addpostimage"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:onClick="imageButtonClicked"
+                android:layout_marginLeft="40dp"
+                android:scaleType="centerCrop" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Local"
-        android:id="@+id/local_evento"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nome do evento"
+                android:id="@+id/nomeEvento"
+                android:textSize="25sp"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Finalizar"
-        android:onClick="submitButtonClicked"/>
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:rowCount="2"
+                android:columnCount="2"
+                android:layout_centerHorizontal="true">
 
-</LinearLayout>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Dia de começo"
+                    android:id="@+id/data_evento_i"
+                    android:focusable="false"
+                    />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Horário"
+                    android:id="@+id/hora_evento_i"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Dia de término"
+                    android:id="@+id/data_evento_t"
+                    android:focusable="false"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Horário"
+                    android:focusable="false"
+                    android:id="@+id/hora_evento_t"/>
+
+            </GridLayout>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="Local"
+                android:id="@+id/local_evento"
+                android:focusable="false"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:id="@+id/descrEvento"
+                android:hint="Descrição"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Finalizar"
+                android:onClick="submitButtonClicked"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,12 +1,14 @@
 package br.com.gfsportclub.sportclub;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,13 +25,14 @@ import com.squareup.picasso.Picasso;
 
 
 public class ProfileFragment extends Fragment {
+    private ImageButton setup;
     private ImageView profileImage;
-    private TextView nome ,interesses, setup, friends;
+    private TextView nome ,interesses, fallowers, fallowing;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private User userOnline;
-    private String interessesProfile = "Interesses: ";
+    private String interessesProfile = "";
 
 
     @Override
@@ -54,20 +57,21 @@ public class ProfileFragment extends Fragment {
         profileImage = (ImageView) v.findViewById(R.id.profilePicure);
         nome = (TextView) v.findViewById(R.id.profileUsername);
         interesses = (TextView) v.findViewById(R.id.interresesProfile);
-        setup = (TextView) v.findViewById(R.id.profile_setup);
-        friends = (TextView) v.findViewById(R.id.profile_friends);
+        setup = (ImageButton) v.findViewById(R.id.profile_setup);
+        fallowers = (TextView) v.findViewById(R.id.profile_fallowers);
+        fallowing = (TextView) v.findViewById(R.id.profile_fallowing);
 
         setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Configurações", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), SetupActivity.class));
             }
         });
 
-        friends.setOnClickListener(new View.OnClickListener() {
+        fallowers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Amigos", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), FriendsActivity.class));
             }
         });
 

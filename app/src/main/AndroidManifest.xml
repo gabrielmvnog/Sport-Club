@@ -6,6 +6,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.apps.photos.permission.GOOGLE_PHOTOS" />
 
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,6 +20,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDEtUBkQMakc1N2JOn9jFbSkbUhboi-hVg" />
+
         <activity
             android:name=".SplashScreenActivity"
             android:noHistory="true"
@@ -50,12 +61,19 @@
             android:name=".SelectSportActivity"
             android:label="@string/title_activity_select_sport"
             android:theme="@style/AppTheme" />
-        <activity android:name=".PostActivity" />
+        <activity
+            android:name=".PostActivity"
+            android:parentActivityName=".BNActivity" />
         <activity android:name=".LoginActivity" />
         <activity
             android:name=".BNActivity"
             android:label="@string/title_activity_bn" />
-        <activity android:name=".SetupActivity"></activity>
+        <activity android:name=".SetupActivity" />
+        <activity
+            android:name=".EventInfoActivity"
+            android:parentActivityName=".BNActivity" />
+        <activity android:name=".FriendsActivity" />
+        <activity android:name=".RegisterFormActivity"></activity>
     </application>
 
 </manifest>

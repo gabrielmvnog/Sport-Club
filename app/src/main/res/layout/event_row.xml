@@ -41,8 +41,7 @@
             android:drawableLeft="@drawable/ic_location_on_black_24dp"
             android:id="@+id/card_event_location"
             android:text="Local"
-            android:layout_margin="5dp"
-            />
+            android:layout_margin="5dp"/>
 
 
     </LinearLayout>

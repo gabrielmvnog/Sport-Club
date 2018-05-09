@@ -10,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -68,12 +69,23 @@ public class EventFragment extends Fragment {
         FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<Event>().setQuery(personsQuery, Event.class).build();
 
         mPeopleRVAdapter = new FirebaseRecyclerAdapter<Event, EventViewHolder>(personsOptions) {
+
+
             @Override
             protected void onBindViewHolder(EventFragment.EventViewHolder holder, final int position, final Event model) {
                 holder.setTitle(model.getTitulo());
                 holder.setData(model.getData());
                 holder.setLocal(model.getLocal());
                 holder.setImage(getContext(), model.getImagem());
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), EventInfoActivity.class);
+                        intent.putExtra("EVENT_KEY", model.getKey());
+                        startActivity(intent);
+                    }
+                });
 
             }
 
@@ -82,6 +94,7 @@ public class EventFragment extends Fragment {
 
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.event_row, parent, false);
+
 
                 return new EventFragment.EventViewHolder(view);
             }

@@ -12,24 +12,29 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-        <RelativeLayout
-            android:background="@color/colorPrimary"
-            android:layout_height="100dp"
-            android:layout_width="match_parent">
-
-        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_name"
+                android:background="@android:color/transparent"
+                android:layout_gravity="right"
+                android:id="@+id/profile_setup"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp" />
+
             <ImageView
                 android:id="@+id/profilePicure"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="10dp"
                 app:srcCompat="@drawable/ic_account_circle_black_24dp"
                 />
 
@@ -41,8 +46,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="TextView"
-                android:textSize="21sp"
-                android:textStyle="bold" />
+                android:textColor="#000000"
+                android:textSize="21sp" />
+
         </LinearLayout>
 
 
@@ -58,56 +64,136 @@
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:columnCount="2">
+            android:columnCount="2"
+            android:rowCount="2">
 
             <TextView
-                android:text="Amigos"
+                android:text="90"
                 android:textColor="#ffffff"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:id="@+id/profile_friends"/>
+                android:paddingRight="15dp"
+                android:textSize="12sp"/>
 
             <TextView
-                android:text="Configurações"
+                android:text="120"
                 android:textColor="#ffffff"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:id="@+id/profile_setup"/>
+                android:paddingLeft="15dp"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:text="Seguidores"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:id="@+id/profile_fallowers"
+                android:paddingRight="15dp"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:text="Seguindo"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:id="@+id/profile_fallowing"
+                android:paddingLeft="15dp"
+                android:textSize="12sp"/>
 
         </GridLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Idade: 22 anos"
-        android:paddingTop="10dp"
-        android:layout_gravity="center"/>
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Gênero: masculino"
-        android:paddingTop="10dp"
-        android:layout_gravity="center"/>
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Profissional"
-        android:layout_gravity="center"
-        android:paddingTop="10dp"/>
 
 
-        <TextView
-            android:id="@+id/interresesProfile"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <GridLayout
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="Interesses: "
-            android:paddingTop="10dp"
-            android:paddingStart="10dp"
-            android:layout_gravity="center"/>
+            android:layout_width="wrap_content"
+            android:rowCount="5"
+            android:columnCount="2">
 
+
+            <TextView
+                android:layout_gravity="right"
+                android:text="Idade: "
+                android:textColor="#9E9E9E"
+                android:textStyle="bold"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"/>
+
+
+            <TextView
+                android:text="22 anos"
+                android:layout_gravity="left"
+                android:paddingTop="10dp"
+                android:textColor="#000000"
+                android:paddingRight="5dp"/>
+
+            <TextView
+                android:text="Gênero: "
+                android:layout_gravity="right"
+                android:textStyle="bold"
+                android:textColor="#9E9E9E"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"/>
+
+
+            <TextView
+                android:text="Masculino"
+                android:layout_gravity="left"
+                android:paddingTop="10dp"
+                android:textColor="#000000"
+                android:paddingRight="5dp"/>
+
+            <TextView
+
+                android:text="Categoria: "
+                android:layout_gravity="right"
+                android:textStyle="bold"
+                android:textColor="#9E9E9E"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"/>
+
+            <TextView
+                android:text="Profissional"
+                android:layout_gravity="left"
+                android:paddingTop="10dp"
+                android:textColor="#000000"
+                android:paddingRight="5dp"/>
+
+
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Interesses: "
+                android:layout_gravity="right"
+                android:textColor="#9E9E9E"
+                android:textStyle="bold"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"/>
+
+
+            <TextView
+                android:id="@+id/interresesProfile"
+                android:text="Futebol, basquete"
+                android:layout_gravity="left"
+                android:textColor="#000000"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"
+                android:inputType="textMultiLine"
+                android:singleLine="false" />
+
+        </GridLayout>
+
+
+    </LinearLayout>
 
 
 </LinearLayout>
