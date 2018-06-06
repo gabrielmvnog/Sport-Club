@@ -57,12 +57,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private DatabaseReference mDatabase;
     private CallbackManager mCallbackManager;
     private boolean userCheck;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+   // private FirebaseAuth.AuthStateListener mAuthListener;
 
     protected void onStart() {
         super.onStart();
 
-        mAuth.addAuthStateListener(mAuthListener);
+    //    mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -71,6 +71,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
@@ -135,7 +137,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 if(task.isSuccessful()){
                                     Toast.makeText(RegisterActivity.this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show();
                                     mDatabase.child(mAuth.getUid()).child("email").setValue(userEmail);
-                                    startActivity(new Intent(RegisterActivity.this, SelectSportActivity.class));
+                                    Intent intent = new Intent(RegisterActivity.this, RegisterFormActivity.class);
+                                    intent.putExtra("EMAIL", userEmail);
+                                    intent.putExtra("SENHA", userSenha);
+                                    startActivity(intent);
 
                                 } else {
                                     Toast.makeText(RegisterActivity.this, "Falha ao criar conta", Toast.LENGTH_SHORT);
@@ -181,14 +186,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         // [END initialize_fblogin]
 
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){
-                    checkIfExist();
-                }
-            }
-        };
+//        mAuthListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                if(firebaseAuth.getCurrentUser() != null){
+//                    checkIfExist();
+//                }
+//            }
+//        };
 
 
     }
@@ -301,7 +306,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     mDatabase.child(key).child("email").setValue(email);
                     mDatabase.child(key).child("nome").setValue(userName);
                     mDatabase.child(key).child("imagem").setValue(imagem.toString());
-                    startActivity(new Intent(RegisterActivity.this, SelectSportActivity.class));
+                    startActivity(new Intent(RegisterActivity.this, RegisterFormActivity.class));
                 }
             }
 

@@ -28,7 +28,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         this.friends = f;
         this.context = c;
 
-
     }
 
     @Override

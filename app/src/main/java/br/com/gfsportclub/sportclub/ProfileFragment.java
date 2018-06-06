@@ -86,9 +86,11 @@ public class ProfileFragment extends Fragment {
                     interessesProfile = interessesProfile + ds.getKey() + ", ";
                 }
 
-                interessesProfile = interessesProfile.substring(0,interessesProfile.length() - 2);
+                if(interessesProfile.length() > 2) {
+                    interessesProfile = interessesProfile.substring(0, interessesProfile.length() - 2);
 
-                interesses.setText(interessesProfile);
+                    interesses.setText(interessesProfile);
+                }
 
             }
 
@@ -96,6 +98,7 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
         });
 
 
