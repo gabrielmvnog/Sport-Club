@@ -6,26 +6,39 @@ package br.com.gfsportclub.sportclub;
 
 public class Event {
 
-    String titulo, imagem, descr, key, data, local;
+    private String adm, data, descr, esporte, hora, key, titulo, latLngLocal, nomeLocal, endLocal;
+    private Long timestamp;
 
-    public Event(){
-
+    public String getLatLngLocal() {
+        return latLngLocal;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public void setLatLngLocal(String latLngLocal) {
+        this.latLngLocal = latLngLocal;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public String getNomeLocal() {
+        return nomeLocal;
     }
 
-    public String getImagem() {
-        return imagem;
+    public void setNomeLocal(String nomeLocal) {
+        this.nomeLocal = nomeLocal;
     }
 
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
+    public String getEndLocal() {
+        return endLocal;
+    }
+
+    public void setEndLocal(String endLocal) {
+        this.endLocal = endLocal;
+    }
+
+    public String getAdm() {
+        return adm;
+    }
+
+    public void setAdm(String adm) {
+        this.adm = adm;
     }
 
     public String getData() {
@@ -36,24 +49,6 @@ public class Event {
         this.data = data;
     }
 
-    public String getLocal() {
-        return local;
-    }
-
-    public void setLocal(String local) {
-        this.local = local;
-    }
-
-    public Event(String titulo, String imagem, String descr, String key, String local, String data){
-            this.titulo = titulo;
-            this.imagem= imagem;
-            this.descr = descr;
-            this.key = key;
-            this.data = data;
-            this.local = local;
-    }
-
-
     public String getDescr() {
         return descr;
     }
@@ -63,11 +58,44 @@ public class Event {
     }
 
 
+    public String getEsporte() {
+        return esporte;
+    }
+
+    public void setEsporte(String esporte) {
+        this.esporte = esporte;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
     public String getKey() {
         return key;
     }
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

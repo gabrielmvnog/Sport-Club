@@ -54,15 +54,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private static final String TAGF = "FacebookLogin";
     private static final int RC_SIGN_IN = 9002;
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private DatabaseReference mDatabase;
     private CallbackManager mCallbackManager;
-    private boolean userCheck;
-   // private FirebaseAuth.AuthStateListener mAuthListener;
+    private boolean userCheck = false;
 
     protected void onStart() {
         super.onStart();
-
-    //    mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -131,16 +129,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     }
 
                     if(!TextUtils.isEmpty(userEmail) && !TextUtils.isEmpty(userSenha)){
+
                         mAuth.createUserWithEmailAndPassword(userEmail,userSenha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
                                     Toast.makeText(RegisterActivity.this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show();
                                     mDatabase.child(mAuth.getUid()).child("email").setValue(userEmail);
-                                    Intent intent = new Intent(RegisterActivity.this, RegisterFormActivity.class);
-                                    intent.putExtra("EMAIL", userEmail);
-                                    intent.putExtra("SENHA", userSenha);
-                                    startActivity(intent);
+                                    mAuth.signInWithEmailAndPassword(userEmail, userSenha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()){
+                                                    Intent intent = new Intent(RegisterActivity.this, RegisterFormActivity.class);
+                                                    startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(RegisterActivity.this, "Falha ao resgistrar!", Toast.LENGTH_LONG).show();
+                                                }
+                                        }
+                                    });
 
                                 } else {
                                     Toast.makeText(RegisterActivity.this, "Falha ao criar conta", Toast.LENGTH_SHORT);
@@ -185,15 +191,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         });
         // [END initialize_fblogin]
 
-
-//        mAuthListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                if(firebaseAuth.getCurrentUser() != null){
-//                    checkIfExist();
-//                }
-//            }
-//        };
 
 
     }
@@ -244,7 +241,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
+                            checkIfExist();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -269,8 +267,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAGF, "signInWithCredential:success");
-                            mAuth.getCurrentUser();
-                            //updateUI(user);
+                            user = mAuth.getCurrentUser();
+                            checkIfExist();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAGF, "signInWithCredential:failure", task.getException());
@@ -290,22 +289,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void checkIfExist(){
-        FirebaseUser user = mAuth.getCurrentUser();
-        final String key = user.getUid();
-        final String email = user.getEmail();
-        final String userName = user.getDisplayName();
-        final Uri imagem = user.getPhotoUrl();
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(key)){
+                if(dataSnapshot.hasChild(user.getUid())){
                     Toast.makeText(RegisterActivity.this, "Usuário já cadastrado", Toast.LENGTH_SHORT).show();
                     signOut();
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 } else {
-                    mDatabase.child(key).child("email").setValue(email);
-                    mDatabase.child(key).child("nome").setValue(userName);
-                    mDatabase.child(key).child("imagem").setValue(imagem.toString());
+                    mDatabase.child(user.getUid()).child("email").setValue(user.getEmail());
                     startActivity(new Intent(RegisterActivity.this, RegisterFormActivity.class));
                 }
             }

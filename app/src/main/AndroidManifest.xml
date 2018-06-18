@@ -27,6 +27,7 @@
         <activity
             android:name=".SplashScreenActivity"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,16 +56,21 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ForgotActivity" />
         <activity
             android:name=".SelectSportActivity"
             android:label="@string/title_activity_select_sport"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".PostActivity"
             android:parentActivityName=".BNActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".BNActivity"
             android:label="@string/title_activity_bn" />
@@ -72,9 +78,19 @@
         <activity
             android:name=".EventInfoActivity"
             android:parentActivityName=".BNActivity" />
-        <activity android:name=".FriendsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RegisterFormActivity"></activity>
+        <activity
+            android:name=".FriendsActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".BNActivity"/>
+        <activity
+            android:name=".RegisterFormActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EventSearchActivity"
+            android:parentActivityName=".BNActivity" />
+        <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName=".BNActivity" />
     </application>
 
 </manifest>

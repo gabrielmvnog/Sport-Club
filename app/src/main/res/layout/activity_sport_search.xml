@@ -4,15 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.gfsportclub.sportclub.FriendsActivity">
+    tools:context=".EventSearchActivity">
 
     <include layout="@layout/bar_sportclub"/>
 
+
+
     <android.support.v7.widget.RecyclerView
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:id="@+id/friends_recyclerview"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="match_parent"
+        android:id="@+id/event_search_list"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v7.widget.RecyclerView>
 
 
 </android.support.design.widget.CoordinatorLayout>

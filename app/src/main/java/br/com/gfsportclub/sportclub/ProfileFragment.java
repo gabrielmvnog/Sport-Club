@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,19 +28,20 @@ import com.squareup.picasso.Picasso;
 public class ProfileFragment extends Fragment {
     private ImageButton setup;
     private ImageView profileImage;
-    private TextView nome ,interesses, fallowers, fallowing;
-    private DatabaseReference mDatabase;
+    private TextView nome ,interesses, friends, nfriends;
+    private DatabaseReference mDatabase, dbUser;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private User userOnline;
+    private Integer counter = 0;
     private String interessesProfile = "";
+    private RecyclerView recyclerView;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Perfil");
-
 
     }
 
@@ -53,13 +55,17 @@ public class ProfileFragment extends Fragment {
         user = mAuth.getCurrentUser();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+        dbUser = FirebaseDatabase.getInstance().getReference().child("users");
+
 
         profileImage = (ImageView) v.findViewById(R.id.profilePicure);
         nome = (TextView) v.findViewById(R.id.profileUsername);
         interesses = (TextView) v.findViewById(R.id.interresesProfile);
         setup = (ImageButton) v.findViewById(R.id.profile_setup);
-        fallowers = (TextView) v.findViewById(R.id.profile_fallowers);
-        fallowing = (TextView) v.findViewById(R.id.profile_fallowing);
+        friends = (TextView) v.findViewById(R.id.profile_friends_button);
+        nfriends = (TextView) v.findViewById(R.id.profile_friends_counter);
+
+        recyclerView = (RecyclerView) v.findViewById(R.id.suggest_friends);
 
         setup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,14 +74,17 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        fallowers.setOnClickListener(new View.OnClickListener() {
+        friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), FriendsActivity.class));
+                Intent intent = new Intent(getActivity(), FriendsActivity.class);
+                intent.putExtra("KEY", user.getUid());
+                startActivity(intent);
             }
         });
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userOnline = dataSnapshot.getValue(User.class);
@@ -85,6 +94,13 @@ public class ProfileFragment extends Fragment {
                 for(DataSnapshot ds : dataSnapshot.child("esportes").getChildren()){
                     interessesProfile = interessesProfile + ds.getKey() + ", ";
                 }
+
+                for(DataSnapshot ds : dataSnapshot.child("friends").getChildren()){
+                    counter++;
+
+                }
+
+                nfriends.setText(counter.toString());
 
                 if(interessesProfile.length() > 2) {
                     interessesProfile = interessesProfile.substring(0, interessesProfile.length() - 2);

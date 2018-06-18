@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +7,7 @@
     tools:context="br.com.gfsportclub.sportclub.ProfileFragment"
     android:orientation="vertical">
 
-
+    <include layout="@layout/bar_sportclub"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,24 +19,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_name"
-                android:background="@android:color/transparent"
-                android:layout_gravity="right"
-                android:id="@+id/profile_setup"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp" />
-
             <LinearLayout
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="50dp">
 
                 <ImageView
-                    android:id="@+id/profilePicure"
+                    android:id="@+id/profile_activity_pic"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="left"
@@ -49,7 +40,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/profileUsername"
+                        android:id="@+id/profile_activity_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TextView"
@@ -62,7 +53,7 @@
                         android:text="0"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
-                        android:id="@+id/profile_friends_counter"/>
+                        android:id="@+id/profile_activity_counter"/>
 
 
                     <TextView
@@ -70,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:text="Amigos"
                         android:layout_gravity="center"
-                        android:id="@+id/profile_friends_button"/>
+                        android:id="@+id/profile_activity_friends"/>
 
 
                 </LinearLayout>
@@ -108,7 +99,7 @@
 
             <TextView
                 android:layout_gravity="right"
-                android:text="Idade: "
+                android:text="Data de nascimento: "
                 android:textColor="#9E9E9E"
                 android:textStyle="bold"
                 android:paddingTop="10dp"
@@ -116,11 +107,12 @@
 
 
             <TextView
-                android:text="22 anos"
+                android:text=""
                 android:layout_gravity="left"
                 android:paddingTop="10dp"
                 android:textColor="#000000"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp"
+                android:id="@+id/profile_activity_data"/>
 
             <TextView
                 android:text="Gênero: "
@@ -132,11 +124,12 @@
 
 
             <TextView
-                android:text="Masculino"
+                android:text=""
                 android:layout_gravity="left"
                 android:paddingTop="10dp"
                 android:textColor="#000000"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp"
+                android:id="@+id/profile_activity_gen"/>
 
             <TextView
 
@@ -148,11 +141,12 @@
                 android:paddingRight="5dp"/>
 
             <TextView
-                android:text="Profissional"
+                android:text=""
                 android:layout_gravity="left"
                 android:paddingTop="10dp"
                 android:textColor="#000000"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp"
+                android:id="@+id/profile_activity_cat"/>
 
 
         </GridLayout>
@@ -171,8 +165,8 @@
 
 
             <TextView
-                android:id="@+id/interresesProfile"
-                android:text="Futebol, basquete"
+                android:id="@+id/profile_activity_int"
+                android:text=""
                 android:layout_gravity="left"
                 android:textColor="#000000"
                 android:paddingTop="10dp"
@@ -184,13 +178,6 @@
 
 
     </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/suggest_friends">
-
-    </android.support.v7.widget.RecyclerView>
 
 
 </LinearLayout>

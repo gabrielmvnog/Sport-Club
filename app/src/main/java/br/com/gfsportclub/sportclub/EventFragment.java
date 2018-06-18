@@ -14,33 +14,44 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
 
 public class EventFragment extends Fragment {
     private FloatingActionButton addPost;
     private DatabaseReference mDatabase;
     private RecyclerView mPeopleRV;
     private FirebaseRecyclerAdapter<Event, EventFragment.EventViewHolder> mPeopleRVAdapter;
+    private final Calendar calendar = Calendar.getInstance();
+    private TextView toolbar_title;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Eventos");
         setHasOptionsMenu(true);
     }
 
@@ -52,6 +63,9 @@ public class EventFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_event, container, false);
 
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+
+        toolbar_title = (TextView) v.findViewById(R.id.toolbar_title);;
+        toolbar_title.setText("Eventos");
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
@@ -73,19 +87,26 @@ public class EventFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(EventFragment.EventViewHolder holder, final int position, final Event model) {
-                holder.setTitle(model.getTitulo());
-                holder.setData(model.getData());
-                holder.setLocal(model.getLocal());
-                holder.setImage(getContext(), model.getImagem());
 
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), EventInfoActivity.class);
-                        intent.putExtra("EVENT_KEY", model.getKey());
-                        startActivity(intent);
-                    }
-                });
+                if(model.getTimestamp() >= calendar.getTimeInMillis()) {
+
+                    holder.setTitle(model.getTitulo());
+                    holder.setData(model.getData() + " - " + model.getHora());
+                    holder.setLocal(model.getNomeLocal());
+                    holder.setSport(model.getEsporte());
+
+                    holder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), EventInfoActivity.class);
+                            intent.putExtra("EVENT_KEY", model.getKey());
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    holder.itemView.setVisibility(holder.itemView.GONE);
+                    holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+                }
 
             }
 
@@ -94,7 +115,6 @@ public class EventFragment extends Fragment {
 
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.event_row, parent, false);
-
 
                 return new EventFragment.EventViewHolder(view);
             }
@@ -153,14 +173,15 @@ public class EventFragment extends Fragment {
             TextView post_data = (TextView)mView.findViewById(R.id.card_event_data);
             post_data.setText(desc);
         }
-        public void setImage(Context ctx, String image){
-            ImageView post_image = (ImageView) mView.findViewById(R.id.card_event_image);
-            Picasso.with(ctx).load(image).into(post_image);
-        }
 
         public void setLocal(String local) {
             TextView post_local = (TextView) mView.findViewById(R.id.card_event_location);
             post_local.setText(local);
+        }
+
+        public  void setSport(String sport){
+            TextView post_sport = (TextView) mView.findViewById(R.id.card_event_sport);
+            post_sport.setText(sport);
         }
     }
 

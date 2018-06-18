@@ -4,17 +4,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.gfsportclub.sportclub.SetupActivity">
+    tools:context="br.com.gfsportclub.sportclub.SetupActivity"
+    android:orientation="vertical"
+    android:layout_margin="30dp">
 
 
+        <ImageView
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            app:srcCompat="@drawable/ic_account_circle_black_24dp"
+            android:layout_gravity="center"
+            android:id="@+id/profile_setup_img"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alterar"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nome:" />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:hint="Nome"
+            android:id="@+id/profile_setup_name"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data de nascimento:" />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:hint="DD/MM/AAAA"
+            android:id="@+id/profile_setup_data"
+            android:focusable="false"/>
+
+
+        <GridLayout
+            android:rowCount="2"
+            android:columnCount="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gênero:"
+                />
+
+            <Spinner
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/profile_setup_genero"/>
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categoria:"
+                />
+
+            <Spinner
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/profile_setup_categoria"/>
+
+        </GridLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finalizar"
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="345dp"
+        android:layout_gravity="center"
+        android:id="@+id/profile_setup_finish"/>
 
     <Button
         android:id="@+id/settings_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sair"
-        tools:layout_editor_absoluteX="150dp"
-        tools:layout_editor_absoluteY="345dp"/>
+        android:text="sair"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="right"/>
 
 
 </LinearLayout>

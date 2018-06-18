@@ -23,20 +23,16 @@
             android:paddingRight="16dp"
             android:paddingTop="16dp" >
 
-            <ImageButton
-                android:id="@+id/addpostimage"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:onClick="imageButtonClicked"
-                android:layout_marginLeft="40dp"
-                android:scaleType="centerCrop" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome do evento:"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nome do evento"
-                android:id="@+id/nomeEvento"
-                android:textSize="25sp"/>
+                android:id="@+id/nomeEvento" />
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -45,11 +41,21 @@
                 android:columnCount="2"
                 android:layout_centerHorizontal="true">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Horário:"/>
+
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Dia de começo"
+                    android:hint="DD/MM/AAAA"
                     android:id="@+id/data_evento_i"
                     android:focusable="false"
                     />
@@ -59,27 +65,15 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:focusable="false"
-                    android:hint="Horário"
+                    android:hint="hh:mm"
                     android:id="@+id/hora_evento_i"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Dia de término"
-                    android:id="@+id/data_evento_t"
-                    android:focusable="false"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Horário"
-                    android:focusable="false"
-                    android:id="@+id/hora_evento_t"/>
 
             </GridLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Local:"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -90,6 +84,11 @@
                 android:id="@+id/local_evento"
                 android:focusable="false"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descrição:"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +96,24 @@
                 android:inputType="textMultiLine"
                 android:id="@+id/descrEvento"
                 android:hint="Descrição"/>
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:columnCount="2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Esporte:"/>
+
+
+                <Spinner
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/post_sport_type"/>
+
+            </android.support.v7.widget.GridLayout>
 
             <Button
                 android:layout_width="match_parent"

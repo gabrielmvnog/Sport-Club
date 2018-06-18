@@ -1,6 +1,7 @@
 package br.com.gfsportclub.sportclub;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,6 +39,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.nomeEsporte.setText(sports.get(position).toString());
+
     }
 
     @Override
@@ -49,9 +50,18 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView nomeEsporte;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             nomeEsporte = itemView.findViewById(R.id.row_s_nome_esporte);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), EventSearchActivity.class);
+                    intent.putExtra("SPORT", sports.get(getAdapterPosition()).toString().toLowerCase());
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
 
     }

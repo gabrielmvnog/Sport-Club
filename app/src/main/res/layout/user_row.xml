@@ -24,19 +24,6 @@
             android:text="Nome"
             android:id="@+id/friends_nome"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="idade"
-            android:textSize="10sp"
-            android:id="@+id/friends_idade"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="categoria"
-            android:textSize="10sp"
-            android:id="@+id/friends_categoria"/>
 
     </LinearLayout>
 

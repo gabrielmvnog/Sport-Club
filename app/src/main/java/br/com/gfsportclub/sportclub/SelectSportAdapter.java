@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class SelectSportAdapter extends RecyclerView.Adapter<SelectSportAdapter.
     private Context context;
     private List sports;
     private DatabaseReference mDatabase;
-    boolean click = false;
+
 
 
     public SelectSportAdapter(Context context, DatabaseReference databaseReference){
@@ -44,20 +45,6 @@ public class SelectSportAdapter extends RecyclerView.Adapter<SelectSportAdapter.
 
         final String sportName = sports.get(position).toString();
         holder.nomeEsporte.setText(sportName);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (!click) {
-                    v.setBackgroundColor(Color.WHITE);
-                    mDatabase.child(sportName).setValue(null);
-                    click = true;
-                } else
-                    v.setBackgroundColor(Color.GRAY);
-                    mDatabase.child(sportName).setValue("true");
-                    click = false;
-                }
-        });
     }
 
     @Override
@@ -67,11 +54,30 @@ public class SelectSportAdapter extends RecyclerView.Adapter<SelectSportAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView nomeEsporte;
+        boolean click = true;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             nomeEsporte = itemView.findViewById(R.id.row_s_nome_esporte);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(click){
+                        itemView.setBackgroundColor(Color.GRAY);
+                        mDatabase.child(sports.get(getAdapterPosition()).toString()).setValue("true");
+                        click = false;
+                    } else {
+                        itemView.setBackgroundColor(Color.WHITE);
+                        mDatabase.child(sports.get(getAdapterPosition()).toString()).setValue(null);
+                        click = true;
+                    }
+
+                }
+            });
         }
+
+
     }
 
 }
