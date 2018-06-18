@@ -48,7 +48,7 @@ public class EventSearchActivity extends AppCompatActivity {
         esportesDatabase = FirebaseDatabase.getInstance().getReference().child("sports").child(sport).child("events");
         eventoDatabase = FirebaseDatabase.getInstance().getReference().child("events");
 
-        esportesDatabase.addValueEventListener(new ValueEventListener() {
+        esportesDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

@@ -7,10 +7,9 @@
     android:orientation="vertical">
 
 
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="170dp">
 
 
         <LinearLayout
@@ -20,18 +19,18 @@
 
 
             <ImageButton
+                android:id="@+id/profile_setup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_name"
-                android:background="@android:color/transparent"
                 android:layout_gravity="right"
-                android:id="@+id/profile_setup"
+                android:background="@android:color/transparent"
                 android:paddingRight="10dp"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:src="@drawable/ic_action_name" />
 
             <LinearLayout
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -39,9 +38,8 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="left"
-                    android:layout_marginTop="10dp"
                     app:srcCompat="@drawable/ic_account_circle_black_24dp"
-                    />
+                    android:layout_marginLeft="20dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -52,25 +50,24 @@
                         android:id="@+id/profileUsername"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
-                        android:textSize="21sp"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        android:textSize="21sp" />
 
                     <TextView
-                        android:layout_height="wrap_content"
+                        android:id="@+id/profile_friends_counter"
                         android:layout_width="wrap_content"
-                        android:text="0"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
-                        android:id="@+id/profile_friends_counter"/>
+                        android:text="0" />
 
 
                     <TextView
-                        android:layout_height="wrap_content"
+                        android:id="@+id/profile_friends_button"
                         android:layout_width="wrap_content"
-                        android:text="Amigos"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:id="@+id/profile_friends_button"/>
+                        android:text="Amigos" />
 
 
                 </LinearLayout>
@@ -83,10 +80,11 @@
     </RelativeLayout>
 
     <View
-        android:layout_height="10dp"
+        android:layout_height="1dp"
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
         android:gravity="center"
+        android:layout_margin="1dp"
         android:orientation="vertical">
 
     </View>
@@ -108,7 +106,7 @@
 
             <TextView
                 android:layout_gravity="right"
-                android:text="Idade: "
+                android:text="Data de nascimento: "
                 android:textColor="#9E9E9E"
                 android:textStyle="bold"
                 android:paddingTop="10dp"
@@ -116,11 +114,11 @@
 
 
             <TextView
-                android:text="22 anos"
                 android:layout_gravity="left"
                 android:paddingTop="10dp"
                 android:textColor="#000000"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp"
+                android:id="@+id/profile_data"/>
 
             <TextView
                 android:text="Gênero: "
@@ -128,15 +126,15 @@
                 android:textStyle="bold"
                 android:textColor="#9E9E9E"
                 android:paddingTop="10dp"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp" />
 
 
             <TextView
-                android:text="Masculino"
                 android:layout_gravity="left"
                 android:paddingTop="10dp"
                 android:textColor="#000000"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp"
+                android:id="@+id/profile_gen"/>
 
             <TextView
 
@@ -148,11 +146,11 @@
                 android:paddingRight="5dp"/>
 
             <TextView
-                android:text="Profissional"
                 android:layout_gravity="left"
                 android:paddingTop="10dp"
                 android:textColor="#000000"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp"
+                android:id="@+id/profile_cat"/>
 
 
         </GridLayout>
@@ -172,7 +170,7 @@
 
             <TextView
                 android:id="@+id/interresesProfile"
-                android:text="Futebol, basquete"
+                android:text=""
                 android:layout_gravity="left"
                 android:textColor="#000000"
                 android:paddingTop="10dp"
@@ -183,7 +181,24 @@
         </GridLayout>
 
 
+
     </LinearLayout>
+
+    <View
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        android:orientation="vertical">
+
+    </View>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sugestão de amizades: "/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

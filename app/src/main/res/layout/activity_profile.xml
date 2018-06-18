@@ -43,7 +43,6 @@
                         android:id="@+id/profile_activity_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
                         android:textSize="21sp"
                         android:layout_gravity="center"/>
 
@@ -63,6 +62,12 @@
                         android:layout_gravity="center"
                         android:id="@+id/profile_activity_friends"/>
 
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Adicionar"
+                        android:id="@+id/profile_activity_add"/>
 
                 </LinearLayout>
 

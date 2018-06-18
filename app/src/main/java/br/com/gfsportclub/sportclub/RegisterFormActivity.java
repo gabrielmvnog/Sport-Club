@@ -145,6 +145,7 @@ public class RegisterFormActivity extends AppCompatActivity {
                         mDatabase.child(user.getUid()).child("nome").setValue(edtNome.getText().toString().trim());
                         mDatabase.child(user.getUid()).child("genero").setValue(genero.getSelectedItem().toString());
                         mDatabase.child(user.getUid()).child("categoria").setValue(categoria.getSelectedItem().toString());
+                        mDatabase.child(user.getUid()).child("key").setValue(user.getUid());
                         startActivity(new Intent(RegisterFormActivity.this, SelectSportActivity.class));
                     }else {
                         StorageReference filePath = storageReference.child("PostImage").child(uri.getLastPathSegment());
@@ -156,6 +157,7 @@ public class RegisterFormActivity extends AppCompatActivity {
                                 mDatabase.child(user.getUid()).child("nome").setValue(edtNome.getText().toString().trim());
                                 mDatabase.child(user.getUid()).child("genero").setValue(genero.getSelectedItem().toString());
                                 mDatabase.child(user.getUid()).child("categoria").setValue(categoria.getSelectedItem().toString());
+                                mDatabase.child(user.getUid()).child("key").setValue(user.getUid());
                                 mDatabase.child(user.getUid()).child("imagem").setValue(downloadurl.toString());
                                 startActivity(new Intent(RegisterFormActivity.this, SelectSportActivity.class));
                             }
