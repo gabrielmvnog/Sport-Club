@@ -70,7 +70,7 @@ public class EventInfoActivity extends AppCompatActivity {
         userDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         mDatabase = FirebaseDatabase.getInstance().getReference("events").child(eventKey);
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 final Event event = dataSnapshot.getValue(Event.class);
@@ -141,7 +141,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
     public void listarUsuario(String key){
 
-        userDatabase.child(key).addValueEventListener(new ValueEventListener() {
+        userDatabase.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);

@@ -7,7 +7,23 @@ package br.com.gfsportclub.sportclub;
 public class Event {
 
     private String adm, data, descr, esporte, hora, key, titulo, latLngLocal, nomeLocal, endLocal;
-    private Long timestamp;
+    private Long timestamp, lat, lng;
+
+    public Long getLat() {
+        return lat;
+    }
+
+    public void setLat(Long lat) {
+        this.lat = lat;
+    }
+
+    public Long getLng() {
+        return lng;
+    }
+
+    public void setLng(Long lng) {
+        this.lng = lng;
+    }
 
     public String getLatLngLocal() {
         return latLngLocal;

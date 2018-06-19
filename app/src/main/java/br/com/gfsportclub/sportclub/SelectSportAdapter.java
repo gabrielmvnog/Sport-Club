@@ -65,11 +65,11 @@ public class SelectSportAdapter extends RecyclerView.Adapter<SelectSportAdapter.
 
                     if(click){
                         itemView.setBackgroundColor(Color.GRAY);
-                        mDatabase.child(sports.get(getAdapterPosition()).toString()).setValue("true");
+                        mDatabase.child(sports.get(getAdapterPosition()).toString().toLowerCase()).setValue("true");
                         click = false;
                     } else {
                         itemView.setBackgroundColor(Color.WHITE);
-                        mDatabase.child(sports.get(getAdapterPosition()).toString()).setValue(null);
+                        mDatabase.child(sports.get(getAdapterPosition()).toString().toLowerCase()).setValue(null);
                         click = true;
                     }
 

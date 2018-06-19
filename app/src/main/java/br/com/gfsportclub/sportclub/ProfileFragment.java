@@ -40,7 +40,6 @@ public class ProfileFragment extends Fragment {
     private Integer counter = 0;
     private String interessesProfile = "";
     private RecyclerView recyclerView;
-    private List<String> listFriends = new LinkedList<>();
     private List<String> listFoF = new LinkedList<>();
     private List<User> userFoF = new LinkedList<>();
     private UserAdapter userAdapter;
@@ -112,11 +111,7 @@ public class ProfileFragment extends Fragment {
 
                 for(DataSnapshot ds : dataSnapshot.child("friends").getChildren()){
                     counter++;
-                    listFriends.add(ds.getKey());
-                }
-
-                for(String f : listFriends){
-                    DFS(f);
+                    DFS(ds.getKey());
                 }
 
                 nfriends.setText(counter.toString());
@@ -151,7 +146,7 @@ public class ProfileFragment extends Fragment {
 
     public void DFS(String friend){
 
-        dbUser.child(friend).addValueEventListener(new ValueEventListener() {
+        dbUser.child(friend).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -161,7 +156,7 @@ public class ProfileFragment extends Fragment {
 
                         listFoF.add(ds.getKey());
 
-                        dbUserFoF.child(ds.getKey()).addValueEventListener(new ValueEventListener() {
+                        dbUserFoF.child(ds.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
 

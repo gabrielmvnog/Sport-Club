@@ -54,7 +54,7 @@ public class EventSearchActivity extends AppCompatActivity {
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
 
-                    eventoDatabase.child(ds.getKey()).addValueEventListener(new ValueEventListener() {
+                    eventoDatabase.child(ds.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Event evento = dataSnapshot.getValue(Event.class);

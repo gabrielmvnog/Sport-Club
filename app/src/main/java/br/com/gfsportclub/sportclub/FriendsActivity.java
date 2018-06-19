@@ -51,13 +51,13 @@ public class FriendsActivity extends AppCompatActivity {
         dbUser = FirebaseDatabase.getInstance().getReference().child("users");
         dbFriends = FirebaseDatabase.getInstance().getReference().child("users").child(key).child("friends");
 
-        dbFriends.addValueEventListener(new ValueEventListener() {
+        dbFriends.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    dbUser.child(ds.getKey()).addValueEventListener(new ValueEventListener() {
+                    dbUser.child(ds.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

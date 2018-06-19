@@ -3,12 +3,19 @@ package br.com.gfsportclub.sportclub;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,10 +30,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -34,20 +46,30 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class EventFragment extends Fragment {
-    private FloatingActionButton addPost;
-    private DatabaseReference mDatabase;
-    private RecyclerView mPeopleRV;
-    private FirebaseRecyclerAdapter<Event, EventFragment.EventViewHolder> mPeopleRVAdapter;
+    private DatabaseReference mDatabase, geoRef, userRef;
+    private RecyclerView recyclerView;
     private final Calendar calendar = Calendar.getInstance();
     private TextView toolbar_title;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private GeoFire geoFire;
+    private List<Event> eventos = new ArrayList<>();
+    private EventAdapter eventAdapter;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,67 +86,87 @@ public class EventFragment extends Fragment {
 
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
 
-        toolbar_title = (TextView) v.findViewById(R.id.toolbar_title);;
+        toolbar_title = (TextView) v.findViewById(R.id.toolbar_title);
         toolbar_title.setText("Eventos");
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("events");
         mDatabase.keepSynced(true);
 
-        mPeopleRV = (RecyclerView) v.findViewById(R.id.eventList);
+        geoRef = FirebaseDatabase.getInstance().getReference().child("locations/events");
+        geoFire = new GeoFire(geoRef);
 
-        DatabaseReference personsRef =  FirebaseDatabase.getInstance().getReference().child("events");
-        Query personsQuery = personsRef.orderByKey();
+        userRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("esportes");
 
-        mPeopleRV.hasFixedSize();
-        mPeopleRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView = (RecyclerView) v.findViewById(R.id.eventList);
 
-        FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<Event>().setQuery(personsQuery, Event.class).build();
 
-        mPeopleRVAdapter = new FirebaseRecyclerAdapter<Event, EventViewHolder>(personsOptions) {
-
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                eventos.clear();
+                geoFireQuery(location.getLatitude(), location.getLongitude());
+                Log.d("Longitude: ", Double.toString(location.getLongitude()));
+                Log.d("Latitude: ", Double.toString(location.getLatitude()));
+            }
 
             @Override
-            protected void onBindViewHolder(EventFragment.EventViewHolder holder, final int position, final Event model) {
-
-                if(model.getTimestamp() >= calendar.getTimeInMillis()) {
-
-                    holder.setTitle(model.getTitulo());
-                    holder.setData(model.getData() + " - " + model.getHora());
-                    holder.setLocal(model.getNomeLocal());
-                    holder.setSport(model.getEsporte());
-
-                    holder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), EventInfoActivity.class);
-                            intent.putExtra("EVENT_KEY", model.getKey());
-                            startActivity(intent);
-                        }
-                    });
-                } else {
-                    holder.itemView.setVisibility(holder.itemView.GONE);
-                    holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
-                }
+            public void onStatusChanged(String provider, int status, Bundle extras) {
 
             }
 
             @Override
-            public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public void onProviderEnabled(String provider) {
 
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.event_row, parent, false);
-
-                return new EventFragment.EventViewHolder(view);
             }
 
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
         };
 
-        mPeopleRV.setAdapter(mPeopleRVAdapter);
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
 
+            ActivityCompat.requestPermissions(getActivity(), new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+            return null;
+        }else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+
+        }
+
+        eventAdapter = new EventAdapter(eventos, getActivity());
+        recyclerView.setAdapter(eventAdapter);
+
+        RecyclerView.LayoutManager ll = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(ll);
 
         return v;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        }
+
     }
 
     @Override
@@ -145,46 +187,89 @@ public class EventFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mPeopleRVAdapter.startListening();
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mPeopleRVAdapter.stopListening();
-
+    public void onPause() {
+        super.onPause();
     }
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder{
-        View mView;
+    public void geoFireQuery(double lat, double lng){
 
-        public EventViewHolder(View itemView) {
-            super(itemView);
-            this.mView = itemView;
-        }
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(lat, lng), 15);
 
-        public void setTitle(String title){
-            TextView post_title = (TextView)mView.findViewById(R.id.card_event_title);
-            post_title.setText(title);
-        }
-        public void setData(String desc){
-            TextView post_data = (TextView)mView.findViewById(R.id.card_event_data);
-            post_data.setText(desc);
-        }
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
 
-        public void setLocal(String local) {
-            TextView post_local = (TextView) mView.findViewById(R.id.card_event_location);
-            post_local.setText(local);
-        }
+                mDatabase.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-        public  void setSport(String sport){
-            TextView post_sport = (TextView) mView.findViewById(R.id.card_event_sport);
-            post_sport.setText(sport);
-        }
+                        final Event evento = dataSnapshot.getValue(Event.class);
+
+                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                for(DataSnapshot ds : dataSnapshot.getChildren()){
+
+                                    if(ds.getKey().equals(evento.getEsporte()) && evento.getTimestamp() >= calendar.getTimeInMillis()){
+                                        eventos.add(evento);
+                                    }
+
+                                }
+
+
+                                eventAdapter.notifyDataSetChanged();
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+
     }
-
-
 
 }

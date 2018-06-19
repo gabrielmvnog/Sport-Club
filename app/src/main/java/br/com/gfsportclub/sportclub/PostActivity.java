@@ -21,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -29,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,17 +47,21 @@ public class PostActivity extends AppCompatActivity {
     private Uri uri = null;
     private EditText edtName, edtDesc, edtDateI, edtEnd, edtHourI;
     private StorageReference storageReference;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, geoDbRef;
     private static final int DIALOG_ID_I = 10;
     private static final int DIALOG_ID_HI = 30;
     private int year_x, month_x, day_x, hour_x, minute_x;
     private int PLACE_PICKER_REQUEST = 1;
-    private String nomeLocal, endLocal, latLngLocal;
+    private String nomeLocal;
+    private String endLocal;
+    private String latLngLocal;
+    private double lat, lng;
     private Spinner sportSelect;
     final Calendar calendar = Calendar.getInstance();
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private String key = null;
+    private GeoFire geoFire;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +133,8 @@ public class PostActivity extends AppCompatActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        geoDbRef = FirebaseDatabase.getInstance().getReference().child("locations/events");
+        geoFire = new GeoFire(geoDbRef);
     }
 
 
@@ -179,6 +188,8 @@ public class PostActivity extends AppCompatActivity {
                 Place place = PlacePicker.getPlace(PostActivity.this, data);
                 edtEnd.setText(place.getName());
                 latLngLocal = place.getLatLng().toString();
+                lat = place.getLatLng().latitude;
+                lng = place.getLatLng().longitude;
                 endLocal = place.getAddress().toString();
                 nomeLocal = place.getName().toString();
             }
@@ -193,7 +204,6 @@ public class PostActivity extends AppCompatActivity {
         final String dataValue = edtDateI.getText().toString().trim();
         final String hourValue = edtHourI.getText().toString().trim();
 
-
         if (!TextUtils.isEmpty(nameValue)) {
 
             Toast.makeText(PostActivity.this, "Upload completado", Toast.LENGTH_LONG).show();
@@ -205,11 +215,23 @@ public class PostActivity extends AppCompatActivity {
             newPost.child("hora").setValue(hourValue);
             newPost.child("nomeLocal").setValue(nomeLocal);
             newPost.child("latLngLocal").setValue(latLngLocal);
+            newPost.child("lat").setValue(lat);
+            newPost.child("lng").setValue(lng);
             newPost.child("endLocal").setValue(endLocal);
             newPost.child("key").setValue(newPost.getKey());
             newPost.child("timestamp").setValue(calendar.getTimeInMillis());
             newPost.child("esporte").setValue(sportSelect.getSelectedItem().toString().toLowerCase());
             newPost.child("adm").setValue(user.getUid());
+
+
+            geoFire.setLocation(key, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+
+                }
+
+            });
+
 
             databaseReference.child("sports").child(sportSelect.getSelectedItem().toString().toLowerCase()).child("events").child(key).setValue("true");
 
