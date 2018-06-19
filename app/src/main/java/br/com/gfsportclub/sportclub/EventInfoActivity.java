@@ -1,6 +1,8 @@
 package br.com.gfsportclub.sportclub;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +33,7 @@ import java.util.List;
 
 public class EventInfoActivity extends AppCompatActivity {
     private String eventKey;
-    private DatabaseReference mDatabase, userDatabase;
+    private DatabaseReference mDatabase, userDatabase, sportDb, geoRef;
     private TextView txtLocal, txtTitle, txtDescr, txtData, txtSport;
     private Button edtButton, joinButton, deleteButton;
     private RecyclerView recyclerView;
@@ -38,7 +41,13 @@ public class EventInfoActivity extends AppCompatActivity {
     private UserAdapter userAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private ValueEventListener mListener;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mDatabase.addValueEventListener(mListener);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +78,10 @@ public class EventInfoActivity extends AppCompatActivity {
 
         userDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         mDatabase = FirebaseDatabase.getInstance().getReference("events").child(eventKey);
+        geoRef = FirebaseDatabase.getInstance().getReference().child("locations/events").child(eventKey);
 
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+         mListener = new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 final Event event = dataSnapshot.getValue(Event.class);
@@ -90,12 +101,6 @@ public class EventInfoActivity extends AppCompatActivity {
                     }
                 });
 
-                deleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
 
                 joinButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -121,14 +126,38 @@ public class EventInfoActivity extends AppCompatActivity {
                     listarUsuario(user.getKey());
                 }
 
+                sportDb = FirebaseDatabase.getInstance().getReference("sports").child(event.getEsporte()).child("events").child(eventKey);
+
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new AlertDialog.Builder(EventInfoActivity.this)
+                                .setTitle("Deletar")
+                                .setMessage("Você tem certeza que deseja deletar?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        sportDb.setValue(null);
+                                        geoRef.setValue(null);
+                                        mDatabase.setValue(null);
+                                        startActivity(new Intent(EventInfoActivity.this,BNActivity.class));
+                                    }})
+                                .setNegativeButton(android.R.string.no, null).show();
+                    }
+                });
+
                 userAdapter.notifyDataSetChanged();
             }
+
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+
+
 
         recyclerView = (RecyclerView) findViewById(R.id.event_info_players);
 
@@ -137,6 +166,20 @@ public class EventInfoActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager ll = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(ll);
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mDatabase.removeEventListener(mListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDatabase.removeEventListener(mListener);
     }
 
     public void listarUsuario(String key){

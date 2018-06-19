@@ -101,7 +101,7 @@
 
         <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Deletar evento"
+            android:text="Deletar"
             android:id="@+id/event_info_delete"/>
 
     </LinearLayout>

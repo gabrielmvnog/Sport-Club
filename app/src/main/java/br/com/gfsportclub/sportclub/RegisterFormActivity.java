@@ -146,9 +146,10 @@ public class RegisterFormActivity extends AppCompatActivity {
                         mDatabase.child(user.getUid()).child("genero").setValue(genero.getSelectedItem().toString());
                         mDatabase.child(user.getUid()).child("categoria").setValue(categoria.getSelectedItem().toString());
                         mDatabase.child(user.getUid()).child("key").setValue(user.getUid());
+                        mDatabase.child(user.getUid()).child("imagem").setValue("https://firebasestorage.googleapis.com/v0/b/sport-club-17f4c.appspot.com/o/ProfileImages%2FProfileImage.png?alt=media&token=7ed7e404-a8a5-4c32-906a-0ede7b817da5");
                         startActivity(new Intent(RegisterFormActivity.this, SelectSportActivity.class));
                     }else {
-                        StorageReference filePath = storageReference.child("PostImage").child(uri.getLastPathSegment());
+                        StorageReference filePath = storageReference.child("ProfileImages").child(uri.getLastPathSegment());
                         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

@@ -111,7 +111,7 @@ public class EventFragment extends Fragment {
                     esportes.add(ds.getKey());
                 }
 
-                geoFireQuery(userOnline.getLat(), userOnline.getLng());
+                if( userOnline.getLat() != null && userOnline.getLng() != null ) geoFireQuery(userOnline.getLat(), userOnline.getLng());
 
             }
 

@@ -2,12 +2,14 @@ package br.com.gfsportclub.sportclub;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class SetupActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
@@ -34,7 +37,9 @@ public class SetupActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private static final String[] generos = {"Masculino", "Feminino"};
     private static final String[] categorias = {"Profissional", "Intermediário", "Amador"};
-
+    private Uri uri = null;
+    private ImageView ivProfile;
+    private static final int SELECT_PICTURE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,17 +67,19 @@ public class SetupActivity extends AppCompatActivity {
         dataNasc = (TextView) findViewById(R.id.profile_setup_data);
         genero = (Spinner) findViewById(R.id.profile_setup_genero);
         categoria = (Spinner) findViewById(R.id.profile_setup_categoria);
+        ivProfile = (ImageView) findViewById(R.id.profile_setup_img);
 
         categoria.setAdapter(adapterCategoria);
         genero.setAdapter(adapterGenero);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if(user != null){
                     nomeUsu.setText(user.nome);
                     dataNasc.setText(user.getDatanasc());
+                    Picasso.with(SetupActivity.this).load(user.imagem).into(ivProfile);
                 }
 
             }
@@ -94,8 +101,25 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryintent = new Intent(Intent.ACTION_PICK);
+                galleryintent.setType("image/*");
+                startActivityForResult(galleryintent, SELECT_PICTURE);
+            }
+        });
 
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            uri = data.getData();
+            ivProfile.setImageURI(uri);
+        }
     }
 
     private void signOut() {
