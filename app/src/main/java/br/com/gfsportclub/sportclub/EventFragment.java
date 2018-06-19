@@ -63,13 +63,12 @@ public class EventFragment extends Fragment {
     private RecyclerView recyclerView;
     private final Calendar calendar = Calendar.getInstance();
     private TextView toolbar_title;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
     private GeoFire geoFire;
     private List<Event> eventos = new ArrayList<>();
     private EventAdapter eventAdapter;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private List<String> esportes = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,53 +99,29 @@ public class EventFragment extends Fragment {
         geoRef = FirebaseDatabase.getInstance().getReference().child("locations/events");
         geoFire = new GeoFire(geoRef);
 
-        userRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("esportes");
+        userRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                User userOnline = dataSnapshot.getValue(User.class);
+
+                for(DataSnapshot ds : dataSnapshot.child("esportes").getChildren()){
+                    esportes.add(ds.getKey());
+                }
+
+                geoFireQuery(userOnline.getLat(), userOnline.getLng());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         recyclerView = (RecyclerView) v.findViewById(R.id.eventList);
-
-
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                eventos.clear();
-                geoFireQuery(location.getLatitude(), location.getLongitude());
-                Log.d("Longitude: ", Double.toString(location.getLongitude()));
-                Log.d("Latitude: ", Double.toString(location.getLatitude()));
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            ActivityCompat.requestPermissions(getActivity(), new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-            return null;
-        }else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
-
-        }
 
         eventAdapter = new EventAdapter(eventos, getActivity());
         recyclerView.setAdapter(eventAdapter);
@@ -154,20 +129,10 @@ public class EventFragment extends Fragment {
         RecyclerView.LayoutManager ll = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(ll);
 
+
         return v;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-        }
-
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -186,16 +151,6 @@ public class EventFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     public void geoFireQuery(double lat, double lng){
 
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(lat, lng), 15);
@@ -203,49 +158,26 @@ public class EventFragment extends Fragment {
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-
+                
                 mDatabase.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         final Event evento = dataSnapshot.getValue(Event.class);
 
-                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(esportes.contains(evento.getEsporte()) && evento.getTimestamp() >= calendar.getTimeInMillis()){
+                            eventos.add(evento);
+                        }
 
-                                for(DataSnapshot ds : dataSnapshot.getChildren()){
-
-                                    if(ds.getKey().equals(evento.getEsporte()) && evento.getTimestamp() >= calendar.getTimeInMillis()){
-                                        eventos.add(evento);
-                                    }
-
-                                }
-
-
-                                eventAdapter.notifyDataSetChanged();
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+                        eventAdapter.notifyDataSetChanged();
 
                     }
-
-
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
-
-
-
 
             }
 
