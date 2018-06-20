@@ -14,9 +14,11 @@
 
 
         <ImageView
-            android:layout_height="130dp"
-            android:layout_width="130dp"
-            android:id="@+id/friends_imagem"/>
+            android:layout_height="150dp"
+            android:layout_width="150dp"
+            android:id="@+id/friends_imagem"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"/>
 
         <TextView
             android:layout_width="wrap_content"

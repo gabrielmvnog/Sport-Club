@@ -9,6 +9,12 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,12 +26,15 @@ import java.util.Calendar;
 import java.util.List;
 
 public class EventSearchActivity extends AppCompatActivity {
-    private DatabaseReference esportesDatabase, eventoDatabase;
+    private DatabaseReference mDatabase, geoFireRef;
     private String sport;
     private List<Event> eventos = new ArrayList<>();
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
     private Calendar calendar = Calendar.getInstance();
+    private GeoFire geoFire;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,35 +54,20 @@ public class EventSearchActivity extends AppCompatActivity {
         TextView toolbar_title = (TextView) findViewById(R.id.toolbar_title);
         toolbar_title.setText(sport.toUpperCase());
 
-        esportesDatabase = FirebaseDatabase.getInstance().getReference().child("sports").child(sport).child("events");
-        eventoDatabase = FirebaseDatabase.getInstance().getReference().child("events");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        esportesDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        geoFireRef = FirebaseDatabase.getInstance().getReference().child("locations/events");
+        geoFire = new GeoFire(geoFireRef);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        mDatabase.child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                User userOn = dataSnapshot.getValue(User.class);
 
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-
-                    eventoDatabase.child(ds.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Event evento = dataSnapshot.getValue(Event.class);
-
-                            if(evento.getTimestamp() >= calendar.getTimeInMillis()){
-                                eventos.add(evento);
-                            }
-
-                            eventAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
-
+                geoQuery(userOn.getLat(),userOn.getLng());
 
             }
 
@@ -83,6 +77,7 @@ public class EventSearchActivity extends AppCompatActivity {
             }
         });
 
+
         eventAdapter = new EventAdapter(eventos, this);
         recyclerView.setAdapter(eventAdapter);
 
@@ -90,5 +85,103 @@ public class EventSearchActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(ll);
 
     }
+
+    public void geoQuery(double lat, double lng){
+
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(lat,lng), 50);
+
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+
+                mDatabase.child("events").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Event event = dataSnapshot.getValue(Event.class);
+
+                        if(event.getTimestamp() >= calendar.getTimeInMillis() && event.getEsporte().equals(sport)){
+                            eventos.add(event);
+                        }
+
+                        quickSort(eventos, 0, (eventos.size() - 1));
+
+                        eventAdapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    public int partitionQuickSort(List<Event> lEventos, int primeiro, int ultimo){
+        double pivot = lEventos.get(ultimo).getTimestamp();
+        int i = (primeiro - 1);
+
+        for(int j = primeiro; j < ultimo; j++){
+
+            if(lEventos.get(j).getTimestamp() <= pivot){
+                i++;
+
+                Event temp = lEventos.get(i);
+                lEventos.set(i, lEventos.get(j));
+                lEventos.set(j, temp);
+
+            }
+
+        }
+
+        Event temp = lEventos.get(i + 1);
+        lEventos.set(i + 1, lEventos.get(ultimo));
+        lEventos.set(ultimo, temp);
+
+        return i+1;
+    }
+
+    public void quickSort(List<Event> lEventos,int primeiro, int ultimo){
+
+        if(primeiro < ultimo){
+
+            int i = partitionQuickSort(lEventos, primeiro, ultimo);
+
+            quickSort(lEventos, primeiro, i-1);
+            quickSort(lEventos, i+1, ultimo);
+
+        }
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
 
 }

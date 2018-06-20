@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -31,9 +32,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -46,11 +49,10 @@ public class PostActivity extends AppCompatActivity {
     private static final String[] sports = {"Futebol", "Basquete", "Tênis", "Volei", "Handebol", "Polo Aquático", "Polo"};
     private Uri uri = null;
     private EditText edtName, edtDesc, edtDateI, edtEnd, edtHourI;
-    private StorageReference storageReference;
     private DatabaseReference databaseReference, geoDbRef;
     private static final int DIALOG_ID_I = 10;
     private static final int DIALOG_ID_HI = 30;
-    private int year_x, month_x, day_x, hour_x, minute_x;
+    private int year_x, month_x, day_x, hour_x, minute_x, hour_check = 0, day_check = 0;
     private int PLACE_PICKER_REQUEST = 1;
     private String nomeLocal;
     private String endLocal;
@@ -94,7 +96,7 @@ public class PostActivity extends AppCompatActivity {
 
         SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
 
-        ArrayAdapter<String> adapterSports = new ArrayAdapter<>(PostActivity.this, android.R.layout.simple_spinner_dropdown_item, sports);
+        final ArrayAdapter<String> adapterSports = new ArrayAdapter<>(PostActivity.this, android.R.layout.simple_spinner_dropdown_item, sports);
         adapterSports.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sportSelect.setAdapter(adapterSports);
 
@@ -131,10 +133,38 @@ public class PostActivity extends AppCompatActivity {
         });
 
 
-        storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         geoDbRef = FirebaseDatabase.getInstance().getReference().child("locations/events");
         geoFire = new GeoFire(geoDbRef);
+
+
+        if(!TextUtils.isEmpty(key)){
+
+            databaseReference.child("events").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    Event event = dataSnapshot.getValue(Event.class);
+
+                    edtName.setText(event.getTitulo());
+                    edtDateI.setText(event.getData());
+                    edtHourI.setText(event.getHora());
+                    edtEnd.setText(event.getNomeLocal());
+                    edtDesc.setText(event.getDescr());
+
+                    int spinnerPosition = adapterSports.getPosition(event.getEsporte());
+                    sportSelect.setSelection(spinnerPosition);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
     }
 
 
@@ -154,6 +184,7 @@ public class PostActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             hour_x = hourOfDay;
             minute_x = minute;
+            hour_check = hourOfDay;
 
             calendar.set(Calendar.HOUR_OF_DAY, hour_x);
             calendar.set(Calendar.MINUTE, minute_x);
@@ -170,6 +201,7 @@ public class PostActivity extends AppCompatActivity {
             year_x = year;
             month_x = month;
             day_x = dayOfMonth;
+            day_check = dayOfMonth;
 
             calendar.set(Calendar.DAY_OF_MONTH, day_x);
             calendar.set(Calendar.MONTH, month_x);
@@ -204,7 +236,7 @@ public class PostActivity extends AppCompatActivity {
         final String dataValue = edtDateI.getText().toString().trim();
         final String hourValue = edtHourI.getText().toString().trim();
 
-        if (!TextUtils.isEmpty(nameValue)) {
+        if (!TextUtils.isEmpty(nameValue) && !TextUtils.isEmpty(dataValue) && TextUtils.isEmpty(key) && !TextUtils.isEmpty(latLngLocal)) {
 
             Toast.makeText(PostActivity.this, "Upload completado", Toast.LENGTH_LONG).show();
             DatabaseReference newPost = databaseReference.child("events").push();
@@ -237,7 +269,45 @@ public class PostActivity extends AppCompatActivity {
 
             startActivity(new Intent(PostActivity.this, BNActivity.class));
 
+        } else if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(nameValue) && !TextUtils.isEmpty(dataValue)){
+            databaseReference.child("events").child(key).child("titulo").setValue(nameValue);
+            databaseReference.child("events").child(key).child("descr").setValue(descrValue);
+            databaseReference.child("events").child(key).child("data").setValue(dataValue);
+            databaseReference.child("events").child(key).child("hora").setValue(hourValue);
+            databaseReference.child("events").child(key).child("esporte").setValue(sportSelect.getSelectedItem().toString().toLowerCase());
+
+            Log.d("Day_x ", String.valueOf(day_x));
+
+            if(day_check != 0 || hour_check !=0){
+                databaseReference.child("events").child(key).child("timestamp").setValue(calendar.getTimeInMillis());
+             }
+
+             if(!TextUtils.isEmpty(latLngLocal)){
+                 databaseReference.child("events").child(key).child("nomeLocal").setValue(nomeLocal);
+                 databaseReference.child("events").child(key).child("latLngLocal").setValue(latLngLocal);
+                 databaseReference.child("events").child(key).child("lat").setValue(lat);
+                 databaseReference.child("events").child(key).child("lng").setValue(lng);
+                 databaseReference.child("events").child(key).child("endLocal").setValue(endLocal);
+
+                 geoFire.setLocation(key, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
+                     @Override
+                     public void onComplete(String key, DatabaseError error) {
+
+                     }
+
+                 });
+             }
+
+            startActivity(new Intent(PostActivity.this, BNActivity.class));
         }
+
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
 }

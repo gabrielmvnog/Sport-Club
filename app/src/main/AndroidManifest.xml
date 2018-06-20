@@ -68,8 +68,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".PostActivity"
-            android:parentActivityName=".BNActivity" />
+            android:name=".PostActivity" />
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait" />
@@ -79,20 +78,19 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".EventInfoActivity"
-            android:parentActivityName=".BNActivity" />
+            />
         <activity
             android:name=".FriendsActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".BNActivity"/>
+            />
         <activity
             android:name=".RegisterFormActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EventSearchActivity"
-            android:parentActivityName=".BNActivity" />
+            android:name=".EventSearchActivity" />
         <activity
             android:name=".ProfileActivity"
-            android:parentActivityName=".BNActivity" />
+            />
     </application>
 
 </manifest>
