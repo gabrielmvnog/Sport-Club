@@ -122,8 +122,6 @@ public class ProfileFragment extends Fragment {
                     interesses.setText(interessesProfile);
                 }
 
-                userAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -163,7 +161,7 @@ public class ProfileFragment extends Fragment {
                                 User fof = dataSnapshot.getValue(User.class);
                                 userFoF.add(fof);
 
-
+                                userAdapter.notifyDataSetChanged();
                             }
 
                             @Override

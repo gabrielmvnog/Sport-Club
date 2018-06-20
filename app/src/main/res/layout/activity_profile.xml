@@ -107,14 +107,11 @@
                 android:text="Data de nascimento: "
                 android:textColor="#9E9E9E"
                 android:textStyle="bold"
-                android:paddingTop="10dp"
                 android:paddingRight="5dp"/>
 
 
             <TextView
-                android:text=""
                 android:layout_gravity="left"
-                android:paddingTop="10dp"
                 android:textColor="#000000"
                 android:paddingRight="5dp"
                 android:id="@+id/profile_activity_data"/>
@@ -124,14 +121,11 @@
                 android:layout_gravity="right"
                 android:textStyle="bold"
                 android:textColor="#9E9E9E"
-                android:paddingTop="10dp"
                 android:paddingRight="5dp"/>
 
 
             <TextView
-                android:text=""
                 android:layout_gravity="left"
-                android:paddingTop="10dp"
                 android:textColor="#000000"
                 android:paddingRight="5dp"
                 android:id="@+id/profile_activity_gen"/>
@@ -142,13 +136,10 @@
                 android:layout_gravity="right"
                 android:textStyle="bold"
                 android:textColor="#9E9E9E"
-                android:paddingTop="10dp"
                 android:paddingRight="5dp"/>
 
             <TextView
-                android:text=""
                 android:layout_gravity="left"
-                android:paddingTop="10dp"
                 android:textColor="#000000"
                 android:paddingRight="5dp"
                 android:id="@+id/profile_activity_cat"/>
@@ -165,16 +156,13 @@
                 android:layout_gravity="right"
                 android:textColor="#9E9E9E"
                 android:textStyle="bold"
-                android:paddingTop="10dp"
                 android:paddingRight="5dp"/>
 
 
             <TextView
                 android:id="@+id/profile_activity_int"
-                android:text=""
                 android:layout_gravity="left"
                 android:textColor="#000000"
-                android:paddingTop="10dp"
                 android:paddingRight="5dp"
                 android:inputType="textMultiLine"
                 android:singleLine="false" />

@@ -269,7 +269,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void checkUserExist(){
         final String user_id = mAuth.getCurrentUser().getUid();
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(user_id)){

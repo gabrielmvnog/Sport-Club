@@ -56,7 +56,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventFragment extends Fragment {
     private DatabaseReference mDatabase, geoRef, userRef;
@@ -151,6 +153,11 @@ public class EventFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
     public void geoFireQuery(double lat, double lng){
 
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(lat, lng), 15);
@@ -165,9 +172,12 @@ public class EventFragment extends Fragment {
 
                         final Event evento = dataSnapshot.getValue(Event.class);
 
+
                         if(esportes.contains(evento.getEsporte()) && evento.getTimestamp() >= calendar.getTimeInMillis()){
                             eventos.add(evento);
                         }
+
+                        quickSort(eventos, 0, (eventos.size() - 1));
 
                         eventAdapter.notifyDataSetChanged();
 
@@ -201,6 +211,43 @@ public class EventFragment extends Fragment {
 
             }
         });
+
+    }
+
+    public int partitionQuickSort(List<Event> lEventos, int primeiro, int ultimo){
+            double pivot = lEventos.get(ultimo).getTimestamp();
+            int i = (primeiro - 1);
+
+            for(int j = primeiro; j < ultimo; j++){
+
+                if(lEventos.get(j).getTimestamp() <= pivot){
+                    i++;
+
+                    Event temp = lEventos.get(i);
+                    lEventos.set(i, lEventos.get(j));
+                    lEventos.set(j, temp);
+
+                }
+
+            }
+
+        Event temp = lEventos.get(i + 1);
+        lEventos.set(i + 1, lEventos.get(ultimo));
+        lEventos.set(ultimo, temp);
+
+        return i+1;
+    }
+
+    public void quickSort(List<Event> lEventos,int primeiro, int ultimo){
+
+        if(primeiro < ultimo){
+
+            int i = partitionQuickSort(lEventos, primeiro, ultimo);
+
+            quickSort(lEventos, primeiro, i-1);
+            quickSort(lEventos, i+1, ultimo);
+
+        }
 
     }
 

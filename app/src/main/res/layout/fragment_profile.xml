@@ -108,13 +108,11 @@
                 android:text="Data de nascimento: "
                 android:textColor="#9E9E9E"
                 android:textStyle="bold"
-                android:paddingTop="10dp"
                 android:paddingRight="5dp"/>
 
 
             <TextView
                 android:layout_gravity="left"
-                android:paddingTop="10dp"
                 android:textColor="#000000"
                 android:paddingRight="5dp"
                 android:id="@+id/profile_data"/>
