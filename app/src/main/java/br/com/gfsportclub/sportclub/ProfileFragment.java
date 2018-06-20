@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 
 public class ProfileFragment extends Fragment {
@@ -42,6 +44,8 @@ public class ProfileFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<String> listFoF = new LinkedList<>();
     private List<User> userFoF = new LinkedList<>();
+    private List<String> visitados = new LinkedList<>();
+    private Queue<String> queueFriends = new LinkedList<>();
     private UserAdapter userAdapter;
 
 
@@ -111,8 +115,12 @@ public class ProfileFragment extends Fragment {
 
                 for(DataSnapshot ds : dataSnapshot.child("friends").getChildren()){
                     counter++;
-                    DFS(ds.getKey());
+                    queueFriends.add(ds.getKey());
+                    visitados.add(ds.getKey());
                 }
+
+                BFS();
+
 
                 nfriends.setText(counter.toString());
 
@@ -142,46 +150,54 @@ public class ProfileFragment extends Fragment {
         return v;
     }
 
-    public void DFS(String friend){
+    public void BFS(){
 
-        dbUser.child(friend).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        while(queueFriends.size() != 0 && userFoF.size() <= 10 ) {
 
-                for(DataSnapshot ds : dataSnapshot.child("friends").getChildren()){
+            dbUser.child((String) queueFriends.poll()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    if(!ds.getKey().equals(user.getUid()) && !listFoF.contains(ds.getKey()) && listFoF.size() <= 10){
+                    for (DataSnapshot ds : dataSnapshot.child("friends").getChildren()) {
 
-                        listFoF.add(ds.getKey());
+                        if (!ds.getKey().equals(user.getUid()) && !visitados.contains(ds.getKey())) {
 
-                        dbUserFoF.child(ds.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                            visitados.add(ds.getKey());
+                            queueFriends.add(ds.getKey());
 
-                                User fof = dataSnapshot.getValue(User.class);
-                                userFoF.add(fof);
+                            dbUserFoF.child(ds.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                userAdapter.notifyDataSetChanged();
-                            }
+                                    User fof = dataSnapshot.getValue(User.class);
+                                    userFoF.add(fof);
+                                    userAdapter.notifyDataSetChanged();
+                                    BFS();
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                }
 
-                            }
-                        });
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                        }
+
                     }
+
 
                 }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
+                }
+            });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
+        }
     }
 
 }
